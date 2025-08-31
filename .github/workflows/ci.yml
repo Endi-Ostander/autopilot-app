@@ -32,6 +32,31 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Archive build
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          mkdir -p dist
+          cp -r build/* dist/  # или путь к твоей сборке
+
+      - name: Upload build artifact
+        if: github.ref == 'refs/heads/dev'
+        uses: actions/upload-artifact@v4
+        with:
+          name: autopilot-build
+          path: dist/**
+
+      - name: Create GitHub Release
+        if: github.ref == 'refs/heads/dev'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Build ${{ github.run_number }}
+          files: dist/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
       - name: Deploy (placeholder)
         if: github.ref == 'refs/heads/dev'
-        run: echo "Deploying... (позже заменим на Docker деплой)"
+        run: echo "Deploying... (позже заменим на например, автоматическое уведомление в Telegram/Discord о готовом билде.)"
