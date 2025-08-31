@@ -13,8 +13,10 @@ on:
 jobs:
   build-test-deploy:
     runs-on: windows-latest
-
+    permissions:
+      contents: write
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -35,8 +37,8 @@ jobs:
       - name: Archive build
         if: github.ref == 'refs/heads/dev'
         run: |
-          mkdir -p dist
-          if (Test-Path build) { Copy-Item -Path build/* -Destination dist/ -Recurse }
+          mkdir dist
+          echo "Build placeholder" > dist/readme.txt
 
       - name: Upload build artifact
         if: github.ref == 'refs/heads/dev'
