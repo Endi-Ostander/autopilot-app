@@ -36,7 +36,7 @@ jobs:
         if: github.ref == 'refs/heads/dev'
         run: |
           mkdir -p dist
-          cp -r build/* dist/  # или путь к твоей сборке
+          if (Test-Path build) { Copy-Item -Path build/* -Destination dist/ -Recurse }
 
       - name: Upload build artifact
         if: github.ref == 'refs/heads/dev'
